@@ -1,5 +1,5 @@
-import pat.pat
+import pat.Pat
 
 fun main() {
-    pat().isVisible = true
+    Pat().isVisible = true
 }

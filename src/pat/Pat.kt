@@ -2,11 +2,9 @@ package pat
 
 import java.awt.BorderLayout
 import java.awt.Dimension
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.awt.geom.AffineTransform
+import java.awt.MouseInfo
+import java.awt.Robot
 import java.awt.geom.RoundRectangle2D
-import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
 import javax.swing.JFrame
 import javax.swing.JLabel
@@ -37,7 +35,7 @@ class Pat : JFrame() {
 
         layout = BorderLayout()
         add(background)
-        background.setBounds(0, 0, width, height)
+
         background.horizontalAlignment = JLabel.CENTER
         background.verticalAlignment = JLabel.CENTER
 
@@ -49,34 +47,41 @@ class Pat : JFrame() {
 
         isAlwaysOnTop = true
         requestFocusInWindow()
-
     }
 
     private fun moveFrame() {
         if (!isOnGround) {
-            applyGravity()
+            val mouseLocation = MouseInfo.getPointerInfo().location
+            val currentX = mouseLocation.x
+            val currentY = mouseLocation.y
+            applyGravity(currentX, currentY)
         }
 
         if (isTouchingGround()) {
             handleGroundCollision()
 
-            val condition = kotlin.random.Random.nextInt(3)
+            val condition = kotlin.random.Random.nextInt(4)
             println(condition)
-            if (condition == 0) {
-                for (i in 50..100) {
-                    Thread.sleep(10) // 1초 대기
+            when (condition) {
+                0 -> for (i in 50..100) {
+                    Thread.sleep(10)
                     setLocation(location.x + 1, location.y)
                     velocityY = 0.0
                 }
-            } else if (condition == 1) {
-                for (i in 50..100) {
-                    Thread.sleep(10) // 1초 대기
+
+                1 -> for (i in 50..100) {
+                    Thread.sleep(20)
                 }
-            } else if (condition == 2) {
-                for (i in 50..100) {
-                    Thread.sleep(10) // 1초 대기
+
+                2 -> for (i in 50..100) {
+                    Thread.sleep(10)
                     setLocation(location.x - 1, location.y)
                     velocityY = 0.0
+                }
+
+                3 -> {
+                    isOnGround = false
+                    velocityY = -11.0
                 }
             }
         } else {
@@ -84,9 +89,13 @@ class Pat : JFrame() {
         }
     }
 
-    private fun applyGravity() {
+    private fun applyGravity(x: Int, y: Int) {
         velocityY += gravity
         setLocation(location.x, (location.y + velocityY).toInt())
+        if (location.y+225>=y && location.y+75<=y && location.x<=x && location.x+225>=x && velocityY > 0) {
+            val robot = Robot()
+            robot.mouseMove(x, location.y + 225)
+        }
     }
 
     private fun isTouchingGround(): Boolean {
@@ -99,4 +108,6 @@ class Pat : JFrame() {
         isOnGround = true
     }
 
+    private fun isJumping(y: Int) {
+    }
 }

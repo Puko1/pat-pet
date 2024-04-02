@@ -1,9 +1,6 @@
 package pat
 
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.MouseInfo
-import java.awt.Robot
+import java.awt.*
 import java.awt.geom.RoundRectangle2D
 import javax.swing.ImageIcon
 import javax.swing.JFrame
@@ -141,14 +138,12 @@ class Pat : JFrame() {
     }
 
     private fun isBlackhole() {
-        for (i in 1..900) {
+        for (i in 1..500) {
             setLocation(location.x, location.y - 1)
             Thread.sleep(1)
         }
-
         val blackholeX = location.x + 75
         val blackholeY = location.y + 75
-        background.icon = iconImage
         for (i in 1..500) {
             val currentMouseLocation = MouseInfo.getPointerInfo().location
             val dx = (blackholeX - currentMouseLocation.x) / 75
@@ -162,4 +157,5 @@ class Pat : JFrame() {
         Blackhole = false
         Blackholing = false
     }
+
 }

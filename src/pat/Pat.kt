@@ -1,6 +1,7 @@
 package pat
 
 import java.awt.*
+import java.awt.event.KeyEvent
 import java.awt.geom.RoundRectangle2D
 import javax.swing.*
 import kotlin.math.abs
@@ -20,6 +21,7 @@ class Pat : JFrame() {
         "pat.png",
         "pat-blackhole.png",
         "pat-w.png",
+        "pat-a.png"
     )
 
 
@@ -49,6 +51,22 @@ class Pat : JFrame() {
     }
 
     private fun moveFrame() {
+        Thread {
+            val pause = kotlin.random.Random.nextInt(125)
+            println(pause)
+            if (pause == 75) {
+                println(pause)
+                changeImage(imagePaths[2])
+                val robot = Robot()
+                for (i in 1..500) {
+                    robot.keyPress(KeyEvent.VK_W)
+                    Thread.sleep(10)
+                }
+                robot.keyPress(KeyEvent.VK_W)
+                changeImage(imagePaths[0])
+            }
+        }.start()
+
         if (!isOnGround) {
             val mouseLocation = MouseInfo.getPointerInfo().location
             val currentX = mouseLocation.x
@@ -65,7 +83,6 @@ class Pat : JFrame() {
             handleGroundCollision()
 
             val condition = kotlin.random.Random.nextInt(100)
-            println(condition)
             if (condition <= 20) {
                 for (i in 50..100) {
                     Thread.sleep(10)
